@@ -12,3 +12,7 @@
 
     - set_fact:
         latest_file: "{{ file_flag.files | sort(attribute='mtime',reverse=true) | first }}"
+        
+    - debug:
+        msg="{{ latest_file }}"
+
