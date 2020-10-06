@@ -1,0 +1,37 @@
+---
+- hosts: UFD
+  become_user: root
+  
+  tasks:
+
+    - name: Create client configuration file
+      file:
+        path: /opt/splunkforwarder/etc/system/local/deploymentclient.conf
+        state: touch
+        mode: '0644'
+      become: true
+
+    - name: adding line in a config file
+      lineinfile:
+        path: /opt/splunkforwarder/etc/system/local/deploymentclient.conf
+        line: "{{ item }}"
+        insertbefore: BOF
+      with_items:
+        - '[target-broker:deploymentServer]'
+        - 'targetUri = 10.1.92.11:8089'
+      become: true
+
+    - name: Change file ownership, group and permissions
+      file:
+        path: /opt/splunkforwarder/etc/system/local/deploymentclient.conf
+        owner: splunk
+        group: splunk
+        mode: '0644'
+      become: true
+
+    - name: executing a shell script
+      shell:
+        "./splunk restart"
+      become: true
+      args:
+        chdir: "/opt/splunkforwarder/bin"
