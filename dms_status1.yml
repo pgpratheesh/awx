@@ -3,12 +3,12 @@
   tasks:
     - name: get the latest env flag file
       find:
-        paths: "{{ path }}/{{ env|upper }}"
+        paths: "/home/oracle/AUTO_LOGS/BounceApps/VASPAT"
         file_type: file
-        patterns: "{{ env|upper }}.flags"
+        patterns: "VASPAT.flags"
         recurse: yes
       become_user: oracle
       register: file_flag
 
     - set_fact:
-      latest_file: "{{ file_flag.files | sort(attribute='mtime',reverse=true) | first }}"
+        latest_file: "{{ file_flag.files | sort(attribute='mtime',reverse=true) | first }}"
