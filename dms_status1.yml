@@ -1,5 +1,5 @@
 ---
-- hosts: dms_inventory
+#- hosts: dms_inventory
   tasks:
   # check the logs for service status
 
@@ -14,37 +14,3 @@
 
     - set_fact:
         latest_file: "{{ file_flag.files | sort(attribute='mtime',reverse=true) | first }}"
-
-    - debug: 
-        msg="{{ latest_file.path }}"
-
-    - name: read the {{ env|upper }} flags
-      shell: cat "{{ latest_file.path }}"
-      register: flag_status
-
-    - debug: 
-        msg="{{ flag_status.stdout.split('\n') | regex_replace('true', 'stopped') | regex_replace('false', 'running') }}"
-
-    - copy: src="{{ latest_file.path }}" dest="{{ flag_bck }}" remote_src=yes
-
-    - lineinfile:
-        path: "{{ flag_bck }}"
-        regexp: "{{ item }}"
-        state: absent
-      with_items:
-        - "^Start"
-        - "^Stop"
-
-    - name: read the {{ env|upper }} flags
-      shell: cat "{{ flag_bck }}"
-      register: flag_bck_status
-
-    - name: checking {{ env|upper }} service status
-      debug:
-        msg="services up and running "
-      when: flag_bck_status.stdout.find('false') != -1
-
-    - name: checking {{ env|upper }} service status
-      debug:
-        msg="services completely stopped "
-      when: flag_bck_status.stdout.find('false') == -1
