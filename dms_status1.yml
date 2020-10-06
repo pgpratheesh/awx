@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+    - name: get the latest env flag file
+      find:
+        paths: "{{ path }}/{{ env|upper }}"
+        file_type: file
+        patterns: "{{ env|upper }}.flags"
+        recurse: yes
+      become_user: oracle
+      register: file_flag
+
+    - set_fact:
+      latest_file: "{{ file_flag.files | sort(attribute='mtime',reverse=true) | first }}"
