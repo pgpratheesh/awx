@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+    - debug: msg="Test pipeline"
+    
+    - shell: echo "$USER"
+      register: result
+      
+    - debug: msg="{{ result }}"
