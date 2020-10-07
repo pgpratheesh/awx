@@ -1,3 +1,4 @@
 ---
 
-- debug: msg="Test4"
+- name: Print test message
+  debug: msg="Test4"
