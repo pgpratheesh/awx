@@ -1,5 +1,7 @@
 ---
+- hosts: all
+  tasks:
 
-- name: Print test message
-  shell: echo "$USER"
-  register: result
+    - name: Print test message
+      shell: echo "$USER"
+      register: result
