@@ -1,10 +1,10 @@
 ---
-#- hosts: all
-#  tasks:
-- debug: msg="AWX"
+- hosts: all
+  tasks:
+    - debug: msg="AWX"
     
-- shell: echo "$USER"
-  register: result
+    - shell: echo "$USER"
+      register: result
       
-- debug: msg="{{ result }}"
+    - debug: msg="{{ result }}"
              
