@@ -1,4 +1,3 @@
 ---
-- hosts: localhost
-  tasks:
-    - debug: msg="Test4"
+
+- debug: msg="Test4"
