@@ -1,7 +1,8 @@
 ---
 
 # dms stopping procedure
-
+- debug:
+    msg="Testing"
 
 - name: creating the package for stop the dms service
   shell: "{{ scr }} create -p BounceApps  -t {{ env|upper }} -k {{ pass }} -a ASM -o STOP"
