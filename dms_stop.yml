@@ -1,35 +1,37 @@
 ---
 
+- hosts: all
+  tasks:
+
 # dms stopping procedure
-- debug:
-    msg="Testing"
-
-- name: creating the package for stop the dms service
-  shell: "{{ scr }} create -p BounceApps  -t {{ env|upper }} -k {{ pass }} -a ASM -o STOP"
-  ignore_errors: true
-  no_log: true
-  register: stop_pack_status
-
-- fail:
-    msg="**Active process exists, Please contact db team**"
-  when: stop_pack_status.stdout_lines.2 is search('Active process exists')
-
-- name: stopping the service
-  shell: "{{ item }}"
-  become: yes
-  become_user: oracle
-  no_log: true
-  with_items:
-    - "{{ scr }} start -p BounceApps -t {{ env|upper }} -k {{ pass }} -l Deactivate_Cron_Jobs"
-    - "{{ scr }} start -p BounceApps -t {{ env|upper }} -k {{ pass }} -l Stop_APP_Services"
-    - "{{ scr }} start -p BounceApps -t {{ env|upper }} -k {{ pass }} -l Stop_DB_Services"
 
 
-- include: dms_status.yml
-  become: true
+    - name: creating the package for stop the dms service
+      shell: "{{ scr }} create -p BounceApps  -t {{ env|upper }} -k {{ pass }} -a ASM -o STOP"
+      ignore_errors: true
+      no_log: true
+      register: stop_pack_status
 
-- fail:
-    msg=" unable to stop Service please check flags"
-  when: flag_status.stdout.find('false') != -1
+    - fail:
+        msg="**Active process exists, Please contact db team**"
+      when: stop_pack_status.stdout_lines.2 is search('Active process exists')
+
+    - name: stopping the service
+      shell: "{{ item }}"
+      become: yes
+      become_user: oracle
+      no_log: true
+      with_items:
+        - "{{ scr }} start -p BounceApps -t {{ env|upper }} -k {{ pass }} -l Deactivate_Cron_Jobs"
+        - "{{ scr }} start -p BounceApps -t {{ env|upper }} -k {{ pass }} -l Stop_APP_Services"
+        - "{{ scr }} start -p BounceApps -t {{ env|upper }} -k {{ pass }} -l Stop_DB_Services"
+
+
+    - include: dms_status.yml
+      become: true
+
+    - fail:
+        msg=" unable to stop Service please check flags"
+      when: flag_status.stdout.find('false') != -1
 
 
