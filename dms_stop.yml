@@ -1,10 +1,8 @@
 ---
-
 - hosts: all
   tasks:
 
 # dms stopping procedure
-
 
     - name: creating the package for stop the dms service
       shell: "{{ scr }} create -p BounceApps  -t {{ env|upper }} -k {{ pass }} -a ASM -o STOP"
@@ -27,7 +25,7 @@
         - "{{ scr }} start -p BounceApps -t {{ env|upper }} -k {{ pass }} -l Stop_DB_Services"
 
 
-    - include: dms_status.yml
+    #- include: dms_status.yml
       become: true
 
     - fail:
