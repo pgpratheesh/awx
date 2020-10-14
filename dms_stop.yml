@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  become_user: oracle
   tasks:
 
 # dms stopping procedure
@@ -16,8 +17,7 @@
 
     - name: stopping the service
       shell: "{{ item }}"
-      become: yes
-      become_user: oracle
+      become: true
       no_log: true
       with_items:
         - "{{ scr }} start -p BounceApps -t {{ env|upper }} -k {{ pass }} -l Deactivate_Cron_Jobs"
@@ -26,7 +26,7 @@
 
 
     #- include: dms_status.yml
-      become: true
+     # become: true
 
     - fail:
         msg=" unable to stop Service please check flags"
