@@ -2,7 +2,7 @@ import os
 
 # Specify the directory path
 path = r'/tmp'
-file_name = 'ppg1234.txt'
+file_name = 'kailasm123456789'
 
 # Creating a file at specified folder
 # join directory and file path
